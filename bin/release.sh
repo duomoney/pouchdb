@@ -9,7 +9,7 @@ else
 fi
 
 #make sure deps are up to date
-rm -fr node_modules
+# rm -fr node_modules
 npm install
 
 # get current version
@@ -23,24 +23,24 @@ git checkout -b $BUILD_DIR
 # Update dependency versions inside each package.json (replace the "*")
 node bin/update-package-json-for-publish.js
 
-# Publish all modules with Lerna
-for pkg in $(ls packages/node_modules); do
-  if [ ! -d "packages/node_modules/$pkg" ]; then
-    continue
-  elif [ "true" = $(node --eval "console.log(require('./packages/node_modules/$pkg/package.json').private);") ]; then
-    continue
-  fi
-  cd packages/node_modules/$pkg
-  echo "Publishing $pkg..."
-  if [ ! -z $DRY_RUN ]; then
-    echo "Dry run, not publishing"
-  elif [ ! -z $BETA ]; then
-    npm publish --tag beta
-  else
-    npm publish
-  fi
-  cd -
-done
+# # Publish all modules with Lerna
+# for pkg in $(ls packages/node_modules); do
+#   if [ ! -d "packages/node_modules/$pkg" ]; then
+#     continue
+#   elif [ "true" = $(node --eval "console.log(require('./packages/node_modules/$pkg/package.json').private);") ]; then
+#     continue
+#   fi
+#   cd packages/node_modules/$pkg
+#   echo "Publishing $pkg..."
+#   if [ ! -z $DRY_RUN ]; then
+#     echo "Dry run, not publishing"
+#   elif [ ! -z $BETA ]; then
+#     npm publish --tag beta
+#   else
+#     npm publish
+#   fi
+#   cd -
+# done
 
 # Create git tag, which is also the Bower/Github release
 rm -fr lib src dist bower.json component.json package.json
@@ -55,7 +55,7 @@ if [ -z $DRY_RUN ]; then
  if [ -z $BETA ]; then
     # Tag and push
     git tag $VERSION
-    git push --tags git@github.com:pouchdb/pouchdb.git $VERSION
+    git push --tags https://github.com/duomoney/pouchdb $VERSION
 
     # Cleanup
     git checkout $SOURCE_DIR
